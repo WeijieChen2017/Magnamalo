@@ -161,16 +161,6 @@ def dataset_go_back(folder_list, sub_folder_list):
     data_trainY_list = glob.glob(train_folderY+"/*.nii")+glob.glob(train_folderY+"/*.nii.gz")
     data_validY_list = glob.glob(valid_folderY+"/*.nii")+glob.glob(valid_folderY+"/*.nii.gz")
 
-    data_trainX_list.sort()
-    data_validX_list.sort()
-    data_trainY_list.sort()
-    data_validY_list.sort()
-
-    print(data_trainX_list)
-    print(data_validX_list)
-    print(data_trainY_list)
-    print(data_validY_list)
-
     for data_path in data_trainX_list:
         cmd = "mv "+data_path+" "+folderX
         os.system(cmd)
@@ -204,6 +194,15 @@ def split_dataset(folderX, folderY, validation_ratio):
     if not os.path.exists(valid_folderY):
         os.makedirs(valid_folderY)
 
+    data_trainX_list.sort()
+    data_validX_list.sort()
+    data_trainY_list.sort()
+    data_validY_list.sort()
+
+    print(data_trainX_list)
+    print(data_validX_list)
+    print(data_trainY_list)
+    print(data_validY_list)
 
     data_path_list = glob.glob(folderX+"/*.nii") + glob.glob(folderX+"/*.nii.gz")
     data_path_list.sort()
@@ -224,8 +223,8 @@ def split_dataset(folderX, folderY, validation_ratio):
     print("train_list: ", train_list)
 
     for valid_name in valid_list:
-        valid_nameX = folderX+"/"+valid_name
-        valid_nameY = folderY+"/"+valid_name
+        valid_nameX = folderX+"/"+valid_name.replace("NACB", "CTAC")
+        valid_nameY = folderY+"/"+valid_name.replace("NACB", "CTAC")
         cmdX = "mv "+valid_nameX+" "+valid_folderX
         cmdY = "mv "+valid_nameY+" "+valid_folderY
         # print(cmdX)
@@ -234,8 +233,8 @@ def split_dataset(folderX, folderY, validation_ratio):
         os.system(cmdY)
 
     for train_name in train_list:
-        train_nameX = folderX+"/"+train_name
-        train_nameY = folderY+"/"+train_name
+        train_nameX = folderX+"/"+train_name.replace("NACB", "CTAC")
+        train_nameY = folderY+"/"+train_name.replace("NACB", "CTAC")
         cmdX = "mv "+train_nameX+" "+train_folderX
         cmdY = "mv "+train_nameY+" "+train_folderY
         # print(cmdX)

@@ -194,18 +194,19 @@ def split_dataset(folderX, folderY, validation_ratio):
     if not os.path.exists(valid_folderY):
         os.makedirs(valid_folderY)
 
-    data_trainX_list.sort()
-    data_validX_list.sort()
-    data_trainY_list.sort()
-    data_validY_list.sort()
+    # data_trainX_list.sort()
+    # data_validX_list.sort()
+    # data_trainY_list.sort()
+    # data_validY_list.sort()
 
-    print(data_trainX_list)
-    print(data_validX_list)
-    print(data_trainY_list)
-    print(data_validY_list)
+    # print(data_trainX_list)
+    # print(data_validX_list)
+    # print(data_trainY_list)
+    # print(data_validY_list)
 
     data_path_list = glob.glob(folderX+"/*.nii") + glob.glob(folderX+"/*.nii.gz")
     data_path_list.sort()
+    print(data_path_list)
     data_path_list = np.asarray(data_path_list)
     np.random.shuffle(data_path_list)
     data_path_list = list(data_path_list)

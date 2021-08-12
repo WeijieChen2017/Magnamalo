@@ -10,7 +10,7 @@ import numpy as np
 from keras.models import model_from_json
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, TensorBoard
-from keras.optimizers import Adam
+# from keras.optimizers import Adam
 from keras.losses import mean_absolute_error, mean_squared_error
 from keras import backend as K
 

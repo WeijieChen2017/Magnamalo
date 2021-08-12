@@ -18,7 +18,7 @@ from utils import dataUtilities as du
 from utils import NiftiGenerator
 
 def eval():
-    train_para_name_hub = ["ex14"]
+    train_para_name_hub = ["ex01"]
     test_para_name_prefix = "ex"
     test_count = 15
     test_count -= 1 # for iteration begining, it add by 1 in the first iteration.
@@ -35,7 +35,7 @@ def eval():
             "train_para_name" : train_para_name,
             "channel_X" : train_para["channel_X"],
             "channel_Y" : train_para["channel_Y"], 
-            "data_folder" : 'TRI_INPUT_2x',
+            "data_folder" : 'data_eval',
         }
 
         print("Model: ./achives/model_"+test_para["train_para_name"]+".json")

@@ -34,7 +34,7 @@ train_para ={
     "save_folder" : './achives/',
     "jpgprogressfile_name" : 'progress_'+para_name,
     "batch_size" : 4, # should be smallish. 1-10
-    "num_epochs" : 25, # should train for at least 100-200 in total
+    "num_epochs" : 5, # should train for at least 100-200 in total
     "steps_per_epoch" : 20*89, # should be enough to be equal to one whole pass through the dataset
     "initial_epoch" : 0, # for resuming training
     "load_weights" : False, # load trained weights for resuming training
@@ -91,8 +91,8 @@ def train():
     niftiGen_augment_opts.translations = 10
     print(niftiGen_augment_opts)
     niftiGen_norm_opts = NiftiGenerator.PairedNiftiGenerator.get_default_normOptions()
-    niftiGen_norm_opts.normXtype = 'auto'
-    niftiGen_norm_opts.normYtype = 'auto'
+    niftiGen_norm_opts.normXtype = 'none'
+    niftiGen_norm_opts.normYtype = 'none'
     print(niftiGen_norm_opts)
 
     folderX = "./data_train/"+train_para["x_data_folder"]

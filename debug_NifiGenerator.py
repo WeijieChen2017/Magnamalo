@@ -141,7 +141,7 @@ generatorV = niftiGenV.generate(img_size=(train_para["img_rows"],train_para["img
 
 
 for [batch_X , batch_Y] in generatorT:
-    print(batch.shape, batch_Y.shape)
+    print(batch_X.shape, batch_Y.shape)
     np.save("batch_X_genT.npy", batch_X)
     np.save("batch_Y_genT.npy", batch_Y)
     exit()

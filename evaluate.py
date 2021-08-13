@@ -97,7 +97,9 @@ def eval():
                 outputY = np.zeros(testX_data.shape)
                 for idx in range(testX_data.shape[2]):
                     inputX_slice = inputX[idx, :, :, :]
+                    print("inputX_slice shape: ", inputX_slice.shape)
                     outputY_slice =  model.predict(inputX_slice, verbose=1)
+                    print("outputY_slice shape: ", outputY_slice.shape)
                     outputY[:, :, idx] = np.squeeze(np.transpose(outputY_slice, (1,2,0,3))[:, :, :, test_para["channel_Y"] // 2]) * testX_max
                 
                 # np.save(testX_name+"_inputX.npy", inputX)

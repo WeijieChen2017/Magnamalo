@@ -111,8 +111,8 @@ niftiGen_augment_opts.shears = 0
 niftiGen_augment_opts.translations = 10
 print(niftiGen_augment_opts)
 niftiGen_norm_opts = NiftiGenerator.PairedNiftiGenerator.get_default_normOptions()
-niftiGen_norm_opts.normXtype = 'auto'
-niftiGen_norm_opts.normYtype = 'auto'
+niftiGen_norm_opts.normXtype = 'none'
+niftiGen_norm_opts.normYtype = 'none'
 print(niftiGen_norm_opts)
 
 folderX = "./data_train/"+train_para["x_data_folder"]

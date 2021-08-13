@@ -3,6 +3,74 @@ import os
 import glob
 
 
+def split_dataset(folderX, folderY, validation_ratio):
+
+    train_folderX = folderX + "/trainX/"
+    train_folderY = folderY + "/trainY/"
+    valid_folderX = folderX + "/validX/"
+    valid_folderY = folderY + "/validY/"
+
+    if not os.path.exists(train_folderX):
+        os.makedirs(train_folderX)
+    if not os.path.exists(train_folderY):
+        os.makedirs(train_folderY)
+    if not os.path.exists(valid_folderX):
+        os.makedirs(valid_folderX)
+    if not os.path.exists(valid_folderY):
+        os.makedirs(valid_folderY)
+
+    # data_trainX_list.sort()
+    # data_validX_list.sort()
+    # data_trainY_list.sort()
+    # data_validY_list.sort()
+
+    # print(data_trainX_list)
+    # print(data_validX_list)
+    # print(data_trainY_list)
+    # print(data_validY_list)
+
+    data_path_list = glob.glob(folderX+"/*.nii") + glob.glob(folderX+"/*.nii.gz")
+    data_path_list.sort()
+    print(data_path_list)
+    data_path_list = np.asarray(data_path_list)
+    np.random.shuffle(data_path_list)
+    data_path_list = list(data_path_list)
+    data_name_list = []
+    for data_path in data_path_list:
+        data_name_list.append(os.path.basename(data_path))
+
+    valid_list = data_name_list[:int(len(data_name_list)*validation_ratio)]
+    valid_list.sort()
+    train_list = list(set(data_name_list) - set(valid_list))
+    train_list.sort()
+
+    print("valid_list: ", valid_list)
+    print('-'*50)
+    print("train_list: ", train_list)
+
+    for valid_name in valid_list:
+        valid_nameX = folderX+"/"+valid_name
+        valid_nameY = folderY+"/"+valid_name.replace("NACB", "CTAC")
+        cmdX = "mv "+valid_nameX+" "+valid_folderX
+        cmdY = "mv "+valid_nameY+" "+valid_folderY
+        print(cmdX)
+        print(cmdY)
+        os.system(cmdX)
+        os.system(cmdY)
+
+    for train_name in train_list:
+        train_nameX = folderX+"/"+train_name
+        train_nameY = folderY+"/"+train_name.replace("NACB", "CTAC")
+        cmdX = "mv "+train_nameX+" "+train_folderX
+        cmdY = "mv "+train_nameY+" "+train_folderY
+        print(cmdX)
+        print(cmdY)
+        os.system(cmdX)
+        os.system(cmdY)
+
+    return [train_folderX, train_folderY, valid_folderX, valid_folderY]
+
+
 para_name = "ex01"
 # Data to be written  
 train_para ={  
@@ -77,70 +145,3 @@ for [batch_X , batch_Y] in generatorT:
     np.save("batch_Y_genT.npy", batch_Y)
     exit()
 
-
-def split_dataset(folderX, folderY, validation_ratio):
-
-    train_folderX = folderX + "/trainX/"
-    train_folderY = folderY + "/trainY/"
-    valid_folderX = folderX + "/validX/"
-    valid_folderY = folderY + "/validY/"
-
-    if not os.path.exists(train_folderX):
-        os.makedirs(train_folderX)
-    if not os.path.exists(train_folderY):
-        os.makedirs(train_folderY)
-    if not os.path.exists(valid_folderX):
-        os.makedirs(valid_folderX)
-    if not os.path.exists(valid_folderY):
-        os.makedirs(valid_folderY)
-
-    # data_trainX_list.sort()
-    # data_validX_list.sort()
-    # data_trainY_list.sort()
-    # data_validY_list.sort()
-
-    # print(data_trainX_list)
-    # print(data_validX_list)
-    # print(data_trainY_list)
-    # print(data_validY_list)
-
-    data_path_list = glob.glob(folderX+"/*.nii") + glob.glob(folderX+"/*.nii.gz")
-    data_path_list.sort()
-    print(data_path_list)
-    data_path_list = np.asarray(data_path_list)
-    np.random.shuffle(data_path_list)
-    data_path_list = list(data_path_list)
-    data_name_list = []
-    for data_path in data_path_list:
-        data_name_list.append(os.path.basename(data_path))
-
-    valid_list = data_name_list[:int(len(data_name_list)*validation_ratio)]
-    valid_list.sort()
-    train_list = list(set(data_name_list) - set(valid_list))
-    train_list.sort()
-
-    print("valid_list: ", valid_list)
-    print('-'*50)
-    print("train_list: ", train_list)
-
-    for valid_name in valid_list:
-        valid_nameX = folderX+"/"+valid_name
-        valid_nameY = folderY+"/"+valid_name.replace("NACB", "CTAC")
-        cmdX = "mv "+valid_nameX+" "+valid_folderX
-        cmdY = "mv "+valid_nameY+" "+valid_folderY
-        print(cmdX)
-        print(cmdY)
-        os.system(cmdX)
-        os.system(cmdY)
-
-    for train_name in train_list:
-        train_nameX = folderX+"/"+train_name
-        train_nameY = folderY+"/"+train_name.replace("NACB", "CTAC")
-        cmdX = "mv "+train_nameX+" "+train_folderX
-        cmdY = "mv "+train_nameY+" "+train_folderY
-        print(cmdX)
-        print(cmdY)
-        os.system(cmdX)
-        os.system(cmdY)
-
-    return [train_folderX, train_folderY, valid_folderX, valid_folderY]

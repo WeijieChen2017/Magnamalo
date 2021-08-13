@@ -96,7 +96,10 @@ def eval():
                 print("inputX shape: ", inputX.shape)
                 outputY = np.zeros(testX_data.shape)
                 for idx in range(testX_data.shape[2]):
-                    inputX_slice = inputX[idx, :, :, :]
+                    inputX_slice = inputX[idx, :, :, :].reshape[1, 
+                                                                test_para["img_rows"],
+                                                                test_para["img_cols"],
+                                                                test_para["channel_X"]]
                     print("inputX_slice shape: ", inputX_slice.shape)
                     outputY_slice =  model.predict(inputX_slice, verbose=1)
                     print("outputY_slice shape: ", outputY_slice.shape)

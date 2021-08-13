@@ -90,7 +90,7 @@ def eval():
                 test_folderX = "./data_test/"+test_para["data_folder"]
                 niftiGenE.initialize(test_folderX, niftiGen_augment_opts, niftiGen_norm_opts)
                 generatorE = niftiGenE.generate(img_size=(test_para["img_rows"],test_para["img_cols"]),
-                                                Xslice_samples=test_para["channel_X"],
+                                                slice_samples=test_para["channel_X"],
                                                 batch_size=test_para["batch_size"])
 
                 # inputX = createInput(testX_data, n_slice=test_para["channel_X"])

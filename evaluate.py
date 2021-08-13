@@ -104,9 +104,9 @@ def eval():
                     outputY_slice =  model.predict(inputX_slice, verbose=1)
                     print("outputY_slice shape: ", outputY_slice.shape)
                     outputY[:, :, idx] = np.squeeze(np.transpose(outputY_slice, (1,2,0,3))[:, :, :, test_para["channel_Y"] // 2]) * testX_max
-                    if idx == 32:
-                        np.save(testX_name+"_inputX.npy", inputX_slice)
-                        np.save(testX_name+"_outputY.npy", outputY_slice)
+                    # if idx == 32:
+                    #     np.save(testX_name+"_inputX.npy", inputX_slice)
+                    #     np.save(testX_name+"_outputY.npy", outputY_slice)
 
 
                 # np.save(testX_name+"_inputX.npy", inputX)
@@ -115,7 +115,7 @@ def eval():
 
                 print("outputY shape: ", outputY.shape)
                 predY_data = outputY
-                predY_data[predY_data < 0] = 0
+                # predY_data[predY_data < 0] = 0
                 testX_sum = np.sum(testX_data)
                 predY_sum = np.sum(predY_data)
                 predY_data = predY_data / predY_sum * testX_sum

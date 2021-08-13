@@ -36,6 +36,9 @@ def eval():
             "channel_X" : train_para["channel_X"],
             "channel_Y" : train_para["channel_Y"], 
             "data_folder" : 'NAC',
+            "img_rows": 512,
+            "img_cols": 512,
+            "batch_size" : 4
         }
 
         print("Model: ./achives/model_"+test_para["train_para_name"]+".json")
@@ -86,9 +89,9 @@ def eval():
                 niftiGenE = NiftiGenerator.SingleNiftiGenerator()
                 test_folderX = "./data_test/"+test_para["data_folder"]
                 niftiGenE.initialize(test_folderX, niftiGen_augment_opts, niftiGen_norm_opts)
-                generatorE = niftiGenE.generate(img_size=(train_para["img_rows"],train_para["img_cols"]),
-                                                Xslice_samples=train_para["channel_X"],
-                                                batch_size=train_para["batch_size"])
+                generatorE = niftiGenE.generate(img_size=(test_para["img_rows"],test_para["img_cols"]),
+                                                Xslice_samples=test_para["channel_X"],
+                                                batch_size=test_para["batch_size"])
 
                 # inputX = createInput(testX_data, n_slice=test_para["channel_X"])
                 # np.save(testX_name+"_inputX.npy", inputX)

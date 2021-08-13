@@ -1,6 +1,7 @@
 from utils import NiftiGenerator
 import os
 import glob
+import numpy as np
 
 
 def split_dataset(folderX, folderY, validation_ratio):

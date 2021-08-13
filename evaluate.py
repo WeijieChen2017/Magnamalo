@@ -56,7 +56,22 @@ def eval():
             print('-'*50)
             print('Loading images from {}...'.format(test_para["data_folder"]))
             print('-'*50)
-            
+
+
+            niftiGen_augment_opts = NiftiGenerator.SingleNiftiGenerator.get_default_augOptions()
+            niftiGen_augment_opts.hflips = False
+            niftiGen_augment_opts.vflips = False
+            niftiGen_augment_opts.rotations = 0
+            niftiGen_augment_opts.scalings = 0
+            niftiGen_augment_opts.shears = 0
+            niftiGen_augment_opts.translations = 0
+            print(niftiGen_augment_opts)
+            niftiGen_norm_opts = NiftiGenerator.SingleNiftiGenerator.get_default_normOptions()
+            niftiGen_norm_opts.normXtype = 'none'
+            niftiGen_norm_opts.normYtype = 'none'
+            print(niftiGen_norm_opts)
+
+
             testX_list = glob.glob("./data_test/"+test_para["data_folder"]+"/*.nii")+glob.glob("./data_test/"+test_para["data_folder"]+"/*.nii.gz")
             testX_list.sort()
             for testX_path in testX_list:
@@ -66,12 +81,19 @@ def eval():
                 testX_data = testX_file.get_fdata()
                 testX_max = np.amax(testX_data)
                 # testX_norm = testX_data / testX_max
-                
                 # inputX = np.transpose(testX_norm, (2,0,1))
-                inputX = createInput(testX_data, n_slice=test_para["channel_X"])
-                np.save(testX_name+"_inputX.npy", inputX)
-                print("inputX shape: ", inputX.shape)
-                outputY =  model.predict(inputX, verbose=1)
+
+                niftiGenE = NiftiGenerator.SingleNiftiGenerator()
+                test_folderX = "./data_test/"+test_para["data_folder"]
+                niftiGenE.initialize(test_folderX, niftiGen_augment_opts, niftiGen_norm_opts)
+                generatorE = niftiGenE.generate(img_size=(train_para["img_rows"],train_para["img_cols"]),
+                                                Xslice_samples=train_para["channel_X"],
+                                                batch_size=train_para["batch_size"])
+
+                # inputX = createInput(testX_data, n_slice=test_para["channel_X"])
+                # np.save(testX_name+"_inputX.npy", inputX)
+                # print("inputX shape: ", inputX.shape)
+                outputY =  model.predict(generatorE, verbose=1)
                 np.save(testX_name+"_outputY.npy", inputX)
                 print("outputY shape: ", np.transpose(outputY, (1,2,0,3)).shape)
                 predY_data = np.squeeze(np.transpose(outputY, (1,2,0,3))[:, :, :, test_para["channel_Y"] // 2]) * testX_max

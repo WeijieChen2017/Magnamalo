@@ -61,18 +61,18 @@ def eval():
             print('-'*50)
 
 
-            niftiGen_augment_opts = NiftiGenerator.SingleNiftiGenerator.get_default_augOptions()
-            niftiGen_augment_opts.hflips = False
-            niftiGen_augment_opts.vflips = False
-            niftiGen_augment_opts.rotations = 0
-            niftiGen_augment_opts.scalings = 0
-            niftiGen_augment_opts.shears = 0
-            niftiGen_augment_opts.translations = 0
-            print(niftiGen_augment_opts)
-            niftiGen_norm_opts = NiftiGenerator.SingleNiftiGenerator.get_default_normOptions()
-            niftiGen_norm_opts.normXtype = 'none'
-            niftiGen_norm_opts.normYtype = 'none'
-            print(niftiGen_norm_opts)
+            # niftiGen_augment_opts = NiftiGenerator.SingleNiftiGenerator.get_default_augOptions()
+            # niftiGen_augment_opts.hflips = False
+            # niftiGen_augment_opts.vflips = False
+            # niftiGen_augment_opts.rotations = 0
+            # niftiGen_augment_opts.scalings = 0
+            # niftiGen_augment_opts.shears = 0
+            # niftiGen_augment_opts.translations = 0
+            # print(niftiGen_augment_opts)
+            # niftiGen_norm_opts = NiftiGenerator.SingleNiftiGenerator.get_default_normOptions()
+            # niftiGen_norm_opts.normXtype = 'none'
+            # niftiGen_norm_opts.normYtype = 'none'
+            # print(niftiGen_norm_opts)
 
 
             testX_list = glob.glob("./data_test/"+test_para["data_folder"]+"/*.nii")+glob.glob("./data_test/"+test_para["data_folder"]+"/*.nii.gz")
@@ -86,20 +86,27 @@ def eval():
                 # testX_norm = testX_data / testX_max
                 # inputX = np.transpose(testX_norm, (2,0,1))
 
-                niftiGenE = NiftiGenerator.SingleNiftiGenerator()
-                test_folderX = "./data_test/"+test_para["data_folder"]
-                niftiGenE.initialize(test_folderX, niftiGen_augment_opts, niftiGen_norm_opts)
-                generatorE = niftiGenE.generate(img_size=(test_para["img_rows"],test_para["img_cols"]),
-                                                slice_samples=test_para["channel_X"],
-                                                batch_size=test_para["batch_size"])
-
-                # inputX = createInput(testX_data, n_slice=test_para["channel_X"])
+                # niftiGenE = NiftiGenerator.SingleNiftiGenerator()
+                # test_folderX = "./data_test/"+test_para["data_folder"]
+                # niftiGenE.initialize(test_folderX, niftiGen_augment_opts, niftiGen_norm_opts)
+                # generatorE = niftiGenE.generate(img_size=(test_para["img_rows"],test_para["img_cols"]),
+                                                # slice_samples=test_para["channel_X"],
+                                                # batch_size=test_para["batch_size"])
+                inputX = createInput(testX_data, n_slice=test_para["channel_X"])
+                print("inputX shape: ", inputX.shape)
+                outputY = np.zeros(testX_data.shape)
+                for idx in range(testX_data.shape[2]):
+                    inputX_slice = inputX[idx, :, :, :]
+                    outputY_slice =  model.predict(inputX_slice, verbose=1)
+                    outputY[:, :, idx] = np.squeeze(np.transpose(outputY_slice, (1,2,0,3))[:, :, :, test_para["channel_Y"] // 2]) * testX_max
+                
                 # np.save(testX_name+"_inputX.npy", inputX)
                 # print("inputX shape: ", inputX.shape)
-                outputY =  model.predict(generatorE, verbose=1)
-                np.save(testX_name+"_outputY.npy", inputX)
-                print("outputY shape: ", np.transpose(outputY, (1,2,0,3)).shape)
-                predY_data = np.squeeze(np.transpose(outputY, (1,2,0,3))[:, :, :, test_para["channel_Y"] // 2]) * testX_max
+                # outputY =  model.predict(generatorE, verbose=1)
+
+                # np.save(testX_name+"_outputY.npy", outputY)
+                print("outputY shape: ", outputY.shape)
+                predY_data = outputY
                 predY_data[predY_data < 0] = 0
                 testX_sum = np.sum(testX_data)
                 predY_sum = np.sum(predY_data)

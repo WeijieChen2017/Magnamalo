@@ -15,7 +15,7 @@ from tensorflow.keras.optimizers import Adam
 from models import Unet
 from utils import NiftiGenerator
 
-para_name = "ex02"
+para_name = "ex03"
 # Data to be written  
 train_para ={  
     "para_name" : para_name,
@@ -24,7 +24,7 @@ train_para ={
     "channel_X" : 5,
     "channel_Y" : 1,
     "start_ch" : 32,
-    "depth" : 3, 
+    "depth" : 4, 
     "validation_split" : 0.2,
     "loss" : "l1",
     "x_data_folder" : 'NAC',
@@ -33,8 +33,8 @@ train_para ={
     "model_name" : 'model_'+para_name+'.json',
     "save_folder" : './achives/',
     "jpgprogressfile_name" : 'progress_'+para_name,
-    "batch_size" : 4, # should be smallish. 1-10
-    "num_epochs" : 25, # should train for at least 100-200 in total
+    "batch_size" : 2, # should be smallish. 1-10
+    "num_epochs" : 5, # should train for at least 100-200 in total
     "steps_per_epoch" : 20*89, # should be enough to be equal to one whole pass through the dataset
     "initial_epoch" : 0, # for resuming training
     "load_weights" : False, # load trained weights for resuming training
